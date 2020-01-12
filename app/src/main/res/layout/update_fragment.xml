@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_Add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_24"
+        android:layout_marginTop="@dimen/space_36"
+        android:layout_marginEnd="@dimen/space_24"
+        android:backgroundTint="@color/cardview_dark_background"
+        android:text="Add"
+        android:textColor="@color/cardview_light_background"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_24"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_24"
+        android:backgroundTint="@color/cardview_dark_background"
+        android:text="Update"
+        android:textColor="@color/cardview_light_background"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_24"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_24"
+        android:backgroundTint="@color/cardview_dark_background"
+        android:text="@string/login"
+        android:textColor="@color/cardview_light_background"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:background="@drawable/spinner_background"
+        android:contentDescription="Speciality"
+        android:entries="@array/speciality_array"
+        android:spinnerMode="dropdown"
+        android:textColor="@color/black"
+        android:visibility="gone" />
+
+</LinearLayout>

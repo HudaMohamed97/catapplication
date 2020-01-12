@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">CatApplication</string>
+    <string name="login">Login</string>
+
+
+    <string-array name="speciality_array">
+        <item>Speciality</item>
+        <item>Cardiologist</item>
+        <item>Internist</item>
+        <item>General Practitioner</item>
+        <item>other</item>
+    </string-array>
+</resources>
