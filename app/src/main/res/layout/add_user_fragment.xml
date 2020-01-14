@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <com.dev.materialspinner.MaterialSpinner
+        android:id="@+id/material_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:visibility="visible">
+
+    </com.dev.materialspinner.MaterialSpinner>
+
+    <com.dev.materialspinner.MaterialSpinner
+        android:id="@+id/materialspinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:textColor="@color/colorPrimaryDark"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:visibility="visible">
+    </com.dev.materialspinner.MaterialSpinner>
+
+    <com.dev.materialspinner.MaterialSpinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:textColor="@color/colorPrimaryDark"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:visibility="visible" />
+
+
+</LinearLayout>

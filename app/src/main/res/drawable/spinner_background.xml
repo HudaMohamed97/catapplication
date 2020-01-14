@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <color android:color="@color/white" />
+        <color android:color="@color/not_black" />
     </item>
     <item
         android:gravity="center_vertical|right"
@@ -26,7 +26,7 @@
                 android:bottom="21dp"
                 android:gravity="center">
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/white" />
+                    <solid android:color="@color/not_black" />
                 </shape>
             </item>
         </layer-list>
