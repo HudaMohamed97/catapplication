@@ -30,7 +30,7 @@
 
     <fragment
         android:id="@+id/AddFragment"
-        android:name="com.example.catapplication.fragments.AddUserFragment"
+        android:name="com.example.catapplication.fragments.addFragment.AddUserFragment"
         tools:layout="@layout/add_user_fragment">
     </fragment>
 

@@ -13,12 +13,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Webservice {
 
     //Base Url
-    private static final String MAIN_URL = "";
+    private static final String MAIN_URL = "http://tasigna.cat-sw.com/api/";
     private static Webservice instance;
     private ApiServices api;
 
     public Webservice() {
-
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
         Gson gson = new GsonBuilder()
                 .setLenient()

@@ -1,47 +1,44 @@
 package com.example.catapplication.network
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.catapplication.models.ApiResponse
+import com.example.catapplication.models.Data
+import com.example.catapplication.models.DataResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 
 class RepositoryHelper : RepositoryInterface {
 
     val apiResponse = ApiResponse()
-
-    override fun login(email: String, password: String): MutableLiveData<ApiResponse.Response> {
-        val data = MutableLiveData<ApiResponse.Response>()
+    override fun login(email: String, password: String): MutableLiveData<Data> {
+        val userData = MutableLiveData<Data>()
         val body = mapOf(
             "email" to email,
             "password" to password
         )
-        Webservice.getInstance().api.login(body).enqueue(object : Callback<ApiResponse.Response> {
+        Webservice.getInstance().api.login(body).enqueue(object : Callback<DataResponse> {
 
-            override fun onFailure(call: Call<ApiResponse.Response>, t: Throwable) {
-
-            }
-
-            override fun onResponse(
-                call: Call<ApiResponse.Response>,
-                response: Response<ApiResponse.Response>
-            ) {
+            override fun onResponse(call: Call<DataResponse>, response: Response<DataResponse>) {
                 apiResponse.responseCode = response.code()
                 apiResponse.isResponseSuccessful = response.isSuccessful
                 if (response.isSuccessful) {
-                    apiResponse.isResponseSuccessful = response.body()?.state == "1"
-                    if (response.body()?.state == "1")
-                        try {
-                            apiResponse.responseBody = response.body()!!.data as Map<String, Any>
-                            data.value = response.body()
-                        } catch (e: Exception) {
-                        }
+                    apiResponse.isResponseSuccessful = response.body()?.state == 1
+                    if (response.body()?.state == 1) {
+                        userData.value = response.body()?.data
+                        Log.i("hhhhhh", "hiiiiii" + userData.value?.email)
+                    }
                 }
             }
-        })
-        return data
 
+            override fun onFailure(call: Call<DataResponse>, t: Throwable) {
+                Log.i("hhhhhh", "faillll")
+
+            }
+        })
+
+        return userData
 
     }
 

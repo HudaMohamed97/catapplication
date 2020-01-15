@@ -1,15 +1,16 @@
-package com.example.catapplication.fragments
+package com.example.catapplication.fragments.addFragment
 
-import android.graphics.Color
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.dev.materialspinner.MaterialSpinner
 import com.example.catapplication.R
 
@@ -19,12 +20,18 @@ class AddUserFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var root: View
     private var list_of_items = arrayOf("Select Country", "USA", "Japan", "India")
     private lateinit var spinner: MaterialSpinner
+    lateinit var shared: SharedPreferences
+    private lateinit var addFragmentViewModel: AddFragmentViewModel
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         root = inflater.inflate(R.layout.add_user_fragment, container, false)
+        addFragmentViewModel = ViewModelProviders.of(this).get(AddFragmentViewModel::class.java)
+
         return root
     }
 
@@ -39,6 +46,15 @@ class AddUserFragment : Fragment(), AdapterView.OnItemSelectedListener {
         if (aa != null) {
             spinner.setAdapter(aa)
         }
+        callDoctorsList()
+    }
+
+    private fun callDoctorsList() {
+        addFragmentViewModel.getDoctorsList(getUserId()).observe(this, Observer {
+            if (it != null) {
+                //do somthing
+            }
+        })
     }
 
     override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {
@@ -53,6 +69,12 @@ class AddUserFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onNothingSelected(arg0: AdapterView<*>) {
 
+    }
+
+    fun getUserId(): Int {
+        shared = activity!!.getSharedPreferences("id", Context.MODE_PRIVATE)
+        val id = shared.getInt("id", 0)
+        return id
     }
 
 

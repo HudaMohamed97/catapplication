@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/mainLayout"
     android:clickable="true"
     android:focusable="true"
 
     >
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:theme="@style/LoginTextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:hint="email"
         android:textColorHint="@color/black"
+        android:theme="@style/LoginTextInputLayoutStyle"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -34,18 +33,19 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password"
-        android:theme="@style/LoginTextInputLayoutStyle"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:hint="password"
         android:textColorHint="@color/black"
+        android:theme="@style/LoginTextInputLayoutStyle"
         app:layout_constraintTop_toBottomOf="@+id/email">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="password"
             android:textColor="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
