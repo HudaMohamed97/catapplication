@@ -6,11 +6,7 @@ import com.example.catapplication.models.DoctorsResponse
 import com.example.catapplication.network.AddFragmentRepository
 
 class AddFragmentViewModel : ViewModel() {
-    private lateinit var addFragmentRepository: AddFragmentRepository
-
-    init {
-        addFragmentRepository = AddFragmentRepository()
-    }
+    private var addFragmentRepository: AddFragmentRepository = AddFragmentRepository()
 
     fun getDoctorsList(userID: Int): MutableLiveData<DoctorsResponse> {
         return addFragmentRepository.getDoctorsList(userID)

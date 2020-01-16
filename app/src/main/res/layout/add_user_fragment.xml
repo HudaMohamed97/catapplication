@@ -1,41 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
 
-    <com.dev.materialspinner.MaterialSpinner
-        android:id="@+id/material_spinner"
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spinnerHospital"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/editbox" />
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spinnerRegion"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/editbox" />
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spinnerCity"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/editbox" />
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spinnerDoctorName"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/editbox" />
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spinnerCml"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/editbox" />
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spinnerDose"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/editbox" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_Add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_10"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"
-        android:visibility="visible">
-
-    </com.dev.materialspinner.MaterialSpinner>
-
-    <com.dev.materialspinner.MaterialSpinner
-        android:id="@+id/materialspinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_10"
-        android:textColor="@color/colorPrimaryDark"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"
-        android:visibility="visible">
-
-    </com.dev.materialspinner.MaterialSpinner>
-
-    <com.dev.materialspinner.MaterialSpinner
-        android:id="@+id/spinner1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_10"
-        android:textColor="@color/colorPrimaryDark"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"
-        android:visibility="visible" />
+        android:layout_marginStart="@dimen/space_36"
+        android:layout_marginTop="@dimen/space_20"
+        android:layout_marginEnd="@dimen/space_36"
+        android:backgroundTint="@color/cardview_dark_background"
+        android:text="Add"
+        android:textColor="@color/cardview_light_background" />
 
 
 </LinearLayout>

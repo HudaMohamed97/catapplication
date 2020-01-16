@@ -4,6 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class DoctorsResponse (
 
-	@SerializedName("data") val data : List<Doctors>,
+	@SerializedName("data") val data : List<DoctorsHospiatalResponce>,
 	@SerializedName("state") val state : Int
 )

@@ -3,6 +3,7 @@ package com.example.catapplication.fragments.addFragment
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,17 +12,27 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.dev.materialspinner.MaterialSpinner
 import com.example.catapplication.R
+import com.example.catapplication.models.Doctors
+import com.example.catapplication.models.DoctorsHospiatalResponce
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner
+import android.widget.AdapterView.OnItemSelectedListener
 
 
-class AddUserFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class AddUserFragment : Fragment() {
 
     private lateinit var root: View
-    private var list_of_items = arrayOf("Select Country", "USA", "Japan", "India")
-    private lateinit var spinner: MaterialSpinner
+    private lateinit var spinner: SearchableSpinner
+    private lateinit var spinnerDose: SearchableSpinner
+    private lateinit var spinnerCity: SearchableSpinner
+    private lateinit var spinnerRegion: SearchableSpinner
+    private lateinit var spinnerCml: SearchableSpinner
+    private lateinit var doctorsSpinner: SearchableSpinner
     lateinit var shared: SharedPreferences
     private lateinit var addFragmentViewModel: AddFragmentViewModel
+    private val hospitalDoctorsList = arrayListOf<DoctorsHospiatalResponce>()
+    private val hospitalNameList = arrayListOf<String>()
+    private val doctorsList = arrayListOf<Doctors>()
 
 
     override fun onCreateView(
@@ -37,41 +48,113 @@ class AddUserFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        spinner = root.findViewById(R.id.material_spinner)
-        spinner.getSpinner().onItemSelectedListener = this
-        val aa =
-            context?.let { ArrayAdapter(it, R.layout.spinner_item, list_of_items) }
-        aa?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Set Adapter to Spinner
-        if (aa != null) {
-            spinner.setAdapter(aa)
-        }
+        setViews()
         callDoctorsList()
+
+
+    }
+
+    private fun setViews() {
+        spinner = root.findViewById(R.id.spinnerHospital)
+        doctorsSpinner = root.findViewById(R.id.spinnerDoctorName)
+        spinnerRegion = root.findViewById(R.id.spinnerRegion)
+        spinnerCity = root.findViewById(R.id.spinnerCity)
+        spinnerCml = root.findViewById(R.id.spinnerCml)
+        spinnerDose = root.findViewById(R.id.spinnerDose)
+    }
+
+    private fun initializeSpinner(spinner: SearchableSpinner, hospitalNameList: ArrayList<String>) {
+        val arrayAdapter =
+            context?.let { ArrayAdapter(it, R.layout.spinner_item, hospitalNameList) }
+
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>,
+                selectedItemView: View,
+                position: Int,
+                id: Long
+            ) {
+
+                val hospital = parentView.getItemAtPosition(position).toString()
+                //  doctorsList.addAll(hospitalDoctorsList[position].doctors)
+                Log.i("hhhhh", "" + position)
+                prepareDoctorsList(hospitalDoctorsList[position].doctors as ArrayList<Doctors>)
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>) {
+                // your code here
+            }
+
+
+        }
+        arrayAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        if (arrayAdapter != null) {
+            spinner.adapter = arrayAdapter
+        }
+    }
+
+    private fun initializeDoctorsSpinner(
+        spinner: SearchableSpinner,
+        hospitalNameList: ArrayList<String>
+    ) {
+        val arrayAdapter =
+            context?.let { ArrayAdapter(it, R.layout.spinner_item, hospitalNameList) }
+
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>,
+                selectedItemView: View,
+                position: Int,
+                id: Long
+            ) {
+
+                val doctor = parentView.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>) {
+                // your code here
+            }
+
+        }
+
+        arrayAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        if (arrayAdapter != null) {
+            spinner.adapter = arrayAdapter
+        }
+
+
     }
 
     private fun callDoctorsList() {
         addFragmentViewModel.getDoctorsList(getUserId()).observe(this, Observer {
             if (it != null) {
-                //do somthing
+                for (hospitalName in it.data) {
+                    hospitalDoctorsList.add(hospitalName)
+                }
+                prepareHospitalsList(hospitalDoctorsList)
             }
         })
     }
 
-    override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {
-        // use position to know the selected item
-        if (position == 0) {
-            spinner.setError("Please select Country")
-        } else {
-            spinner.setErrorEnabled(false)
-            spinner.setLabel("COUNTRY")
+    private fun prepareHospitalsList(hospitaDoctorsList: ArrayList<DoctorsHospiatalResponce>) {
+        for (hospital in hospitaDoctorsList) {
+            hospitalNameList.add(hospital.name)
         }
+        initializeSpinner(spinner, hospitalNameList)
+
+
     }
 
-    override fun onNothingSelected(arg0: AdapterView<*>) {
-
+    private fun prepareDoctorsList(hospitalsDoctorsList: ArrayList<Doctors>) {
+        val doctorsNameList = arrayListOf<String>()
+        for (doctor in hospitalsDoctorsList) {
+            doctorsNameList.add(doctor.name)
+        }
+        initializeDoctorsSpinner(doctorsSpinner, doctorsNameList)
     }
 
-    fun getUserId(): Int {
+
+    private fun getUserId(): Int {
         shared = activity!!.getSharedPreferences("id", Context.MODE_PRIVATE)
         val id = shared.getInt("id", 0)
         return id

@@ -129,7 +129,7 @@
         android:layout_marginTop="@dimen/space_10"
         android:layout_marginEnd="@dimen/space_24"
         android:backgroundTint="@color/cardview_dark_background"
-        android:text="Update"
+        android:text="Switch"
         android:textColor="@color/cardview_light_background"
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
@@ -141,7 +141,7 @@
         android:layout_marginTop="@dimen/space_10"
         android:layout_marginEnd="@dimen/space_24"
         android:backgroundTint="@color/cardview_dark_background"
-        android:text="@string/login"
+        android:text="Drop"
         android:textColor="@color/cardview_light_background"
         app:layout_constraintTop_toBottomOf="@+id/password" />
 

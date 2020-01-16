@@ -17,6 +17,7 @@ class LoginViewModel : ViewModel() {
     private lateinit var shared: SharedPreferences
 
 
+
     init {
         repositoryHelper = RepositoryHelper()
     }
@@ -55,11 +56,11 @@ class LoginViewModel : ViewModel() {
 
     }
 
-    fun saveData(userData: Data,context: Context) {
+    fun saveData(userData: Data, context: Context) {
         shared = context.getSharedPreferences("id", Context.MODE_PRIVATE)
         val myDataHolder = shared.edit()
         myDataHolder.putInt("id", userData.id)
-        Log.i("hhhh",""+userData.id)
+        Log.i("hhhh", "" + userData.id)
         myDataHolder.putString("name", userData.username)
         myDataHolder.putString("email", userData.email)
         myDataHolder.putString("account_type", userData.account_type)
@@ -74,6 +75,7 @@ class LoginViewModel : ViewModel() {
 
 
     }
+
 
 }
 
