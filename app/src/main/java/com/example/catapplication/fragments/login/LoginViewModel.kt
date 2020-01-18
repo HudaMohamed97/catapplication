@@ -12,15 +12,11 @@ import com.example.catapplication.utilies.Validation
 
 
 class LoginViewModel : ViewModel() {
-    private var repositoryHelper: RepositoryHelper
+    private var repositoryHelper: RepositoryHelper = RepositoryHelper()
     private lateinit var mutableLiveData: MutableLiveData<Data>
     private lateinit var shared: SharedPreferences
+    val isLoading = MutableLiveData<Boolean>().apply { value = false }
 
-
-
-    init {
-        repositoryHelper = RepositoryHelper()
-    }
 
     fun validateLoginInfo(
         emailEt: String,
@@ -52,6 +48,7 @@ class LoginViewModel : ViewModel() {
     }
 
     fun login(emailEt: String, passwordEt: String) {
+        isLoading.value = true
         mutableLiveData = repositoryHelper.login(emailEt, passwordEt)
 
     }
@@ -71,6 +68,7 @@ class LoginViewModel : ViewModel() {
     }
 
     fun getData(): LiveData<Data> {
+        isLoading.value = false
         return mutableLiveData
 
 

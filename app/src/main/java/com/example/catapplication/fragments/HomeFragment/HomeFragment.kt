@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.catapplication.R
+import com.example.catapplication.fragments.addFragment.AddUserFragment
 import com.razerdp.widget.animatedpieview.AnimatedPieView
 import com.razerdp.widget.animatedpieview.AnimatedPieViewConfig
 import com.razerdp.widget.animatedpieview.data.SimplePieInfo
@@ -35,9 +37,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addButtonAction()
-        addDropAction()
-        addSwitchAction()
+        addButtonSwitchAction()
+        addButtonDropAction()
         initializePieChart()
+
 
     }
 
@@ -81,21 +84,27 @@ class HomeFragment : Fragment() {
     private fun addButtonAction() {
         val button = root.findViewById(R.id.btn_Add) as Button
         button.setOnClickListener {
-            findNavController().navigate(R.id.action_HomeFragment_to_AddFragment)
+            var bundle = bundleOf("fromFragment" to "fromAdd")
+            findNavController().navigate(R.id.action_HomeFragment_to_AddFragment, bundle)
         }
     }
 
-    private fun addDropAction() {
-        val button = root.findViewById(R.id.btn_update) as Button
-        button.setOnClickListener {
-            //findNavController().navigate(R.id.action_HomeFragment_to_AddFragment)
+    private fun addButtonDropAction() {
+        val switchButton = root.findViewById(R.id.btn_switch) as Button
+        switchButton.setOnClickListener {
+            var bundle = bundleOf("fromFragment" to "fromSwitch")
+
+            findNavController().navigate(R.id.action_HomeFragment_to_SwitchFragment, bundle)
         }
     }
 
-    fun addSwitchAction() {
-        val button = root.findViewById(R.id.btn_login) as Button
-        button.setOnClickListener {
-            // findNavController().navigate(R.id.action_HomeFragment_to_AddFragment)
+    private fun addButtonSwitchAction() {
+        val dropButton = root.findViewById(R.id.btn_Drop) as Button
+        dropButton.setOnClickListener {
+            var bundle = bundleOf("fromFragment" to "fromDrop")
+
+            //  findNavController().navigate(R.id.action_HomeFragment_to_DropFragment, bundle)
+            findNavController().navigate(R.id.action_HomeFragment_to_PatientFragment)
         }
     }
 }

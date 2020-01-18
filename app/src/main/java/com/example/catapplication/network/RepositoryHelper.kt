@@ -33,8 +33,7 @@ class RepositoryHelper : RepositoryInterface {
             }
 
             override fun onFailure(call: Call<DataResponse>, t: Throwable) {
-                Log.i("hhhhhh", "faillll")
-
+//kkkkkkkkkkk
             }
         })
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -11,42 +12,81 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="10dp"
-        android:background="@drawable/editbox" />
+        android:background="@drawable/editbox"
+        android:clickable="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:hintText="Hospital" />
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerRegion"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="10dp"
-        android:background="@drawable/editbox" />
+        android:background="@drawable/editbox"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:hintText="Region" />
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerCity"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="10dp"
-        android:background="@drawable/editbox" />
+        android:background="@drawable/editbox"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:hintText="City" />
+
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerDoctorName"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="10dp"
-        android:background="@drawable/editbox" />
+        android:background="@drawable/editbox"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:spinnerMode="dropdown"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:hintText="Doctor Name" />
+
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerCml"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="10dp"
-        android:background="@drawable/editbox" />
+        android:background="@drawable/editbox"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:hintText="CMl" />
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinnerDose"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="10dp"
-        android:background="@drawable/editbox" />
+        android:background="@drawable/editbox"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:hintText="Dose" />
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spinnersDropReasons"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/editbox"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:visibility="gone"
+        app:hintText="Reason of drop" />
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spinnerSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/editbox"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:visibility="gone"
+        app:hintText="Switch To" />
 
 
     <com.google.android.material.button.MaterialButton

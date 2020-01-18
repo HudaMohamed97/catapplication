@@ -15,6 +15,13 @@
             app:destination="@id/HomeFragment" />
 
     </fragment>
+    <fragment
+        android:id="@+id/PatientFragment"
+        android:name="com.example.catapplication.fragments.PatientsFragment.PatientsFragment"
+        tools:layout="@layout/patient_fragment">
+
+
+    </fragment>
 
     <fragment
         android:id="@+id/HomeFragment"
@@ -23,7 +30,22 @@
 
         <action
             android:id="@+id/action_HomeFragment_to_AddFragment"
-            app:destination="@id/AddFragment" />
+            app:destination="@id/AddFragment"></action>
+        <action
+            android:id="@+id/action_HomeFragment_to_DropFragment"
+            app:destination="@id/AddFragment">
+
+        </action>
+        <action
+            android:id="@+id/action_HomeFragment_to_SwitchFragment"
+            app:destination="@id/AddFragment">
+
+        </action>
+        <action
+            android:id="@+id/action_HomeFragment_to_PatientFragment"
+            app:destination="@id/PatientFragment">
+
+        </action>
 
 
     </fragment>
@@ -32,6 +54,7 @@
         android:id="@+id/AddFragment"
         android:name="com.example.catapplication.fragments.addFragment.AddUserFragment"
         tools:layout="@layout/add_user_fragment">
+
     </fragment>
 
 

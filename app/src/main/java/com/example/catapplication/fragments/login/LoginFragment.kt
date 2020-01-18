@@ -1,10 +1,8 @@
 package com.example.catapplication.fragments.login
 
+import android.app.ProgressDialog
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.catapplication.R
 import com.google.android.material.textfield.TextInputLayout
-import kotlin.math.log
 
 
 class LoginFragment : Fragment(), LoginInterface {
@@ -24,6 +21,7 @@ class LoginFragment : Fragment(), LoginInterface {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var email: TextInputLayout
     private lateinit var passwordEt: TextInputLayout
+    private var dialog: ProgressDialog? = null
 
 
     override fun onCreateView(
@@ -39,6 +37,29 @@ class LoginFragment : Fragment(), LoginInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setClickListeners()
+        listenToLoading()
+    }
+
+    private fun listenToLoading() {
+        loginViewModel.isLoading.observe(this, Observer {
+            if (it) {
+                showLoader()
+            } else {
+                hideLoader()
+            }
+        })
+    }
+
+    private fun hideLoader() {
+        dialog?.dismiss()
+
+    }
+
+    private fun showLoader() {
+        dialog = ProgressDialog(activity)
+        dialog?.setMessage("Please, Wait")
+        dialog?.setCancelable(false)
+        dialog?.show()
     }
 
 
@@ -53,6 +74,7 @@ class LoginFragment : Fragment(), LoginInterface {
         }
         button.setOnClickListener {
             checkErrorEnabled()
+            hideKeyboard()
             if (loginViewModel.validateLoginInfo(
                     email.editText?.text.toString(),
                     passwordEt.editText?.text.toString()
