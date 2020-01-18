@@ -3,11 +3,13 @@ package com.example.catapplication.fragments.login
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -37,14 +39,16 @@ class LoginFragment : Fragment(), LoginInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setClickListeners()
-        listenToLoading()
+        //listenToLoading()
     }
 
     private fun listenToLoading() {
         loginViewModel.isLoading.observe(this, Observer {
             if (it) {
+                Log.i("hhhh", "showw")
                 showLoader()
             } else {
+                Log.i("hhhh", "hideee")
                 hideLoader()
             }
         })
@@ -89,17 +93,33 @@ class LoginFragment : Fragment(), LoginInterface {
     }
 
     private fun callLoginRequest() {
+        showLoader()
         loginViewModel.login(
             email.editText?.text.toString(),
             passwordEt.editText?.text.toString()
         )
         loginViewModel.getData().observe(this, Observer {
+            hideLoader()
             if (it != null) {
-                loginViewModel.saveData(it, activity!!)
-                findNavController().navigate(R.id.action_loginFragment_to_updateFragment)
+                if (it.state == 1) {
+                    loginViewModel.saveData(it.data, activity!!)
+                    findNavController().navigate(R.id.action_loginFragment_to_updateFragment)
+                } else {
+                    Toast.makeText(activity, "Wrong User or password", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } else {
+                hideLoader()
+                Toast.makeText(
+                    activity,
+                    " there is an Error Occurs Wrong User or password",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
             }
 
         })
+
     }
 
     private fun checkErrorEnabled() {

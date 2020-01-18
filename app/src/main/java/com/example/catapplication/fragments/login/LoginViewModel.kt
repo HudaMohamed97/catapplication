@@ -7,15 +7,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.catapplication.models.Data
+import com.example.catapplication.models.DataResponse
 import com.example.catapplication.network.RepositoryHelper
 import com.example.catapplication.utilies.Validation
 
 
 class LoginViewModel : ViewModel() {
     private var repositoryHelper: RepositoryHelper = RepositoryHelper()
-    private lateinit var mutableLiveData: MutableLiveData<Data>
+    private lateinit var mutableLiveData: MutableLiveData<DataResponse>
     private lateinit var shared: SharedPreferences
-    val isLoading = MutableLiveData<Boolean>().apply { value = false }
+    val isLoading = MutableLiveData<Boolean>()
 
 
     fun validateLoginInfo(
@@ -48,7 +49,7 @@ class LoginViewModel : ViewModel() {
     }
 
     fun login(emailEt: String, passwordEt: String) {
-        isLoading.value = true
+       // isLoading.value = true
         mutableLiveData = repositoryHelper.login(emailEt, passwordEt)
 
     }
@@ -67,8 +68,7 @@ class LoginViewModel : ViewModel() {
         myDataHolder.apply()
     }
 
-    fun getData(): LiveData<Data> {
-        isLoading.value = false
+    fun getData(): MutableLiveData<DataResponse> {
         return mutableLiveData
 
 

@@ -12,7 +12,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.catapplication.R
-import com.example.catapplication.fragments.addFragment.AddUserFragment
 import com.razerdp.widget.animatedpieview.AnimatedPieView
 import com.razerdp.widget.animatedpieview.AnimatedPieViewConfig
 import com.razerdp.widget.animatedpieview.data.SimplePieInfo
@@ -37,8 +36,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addButtonAction()
-        addButtonSwitchAction()
-        addButtonDropAction()
+        addButtonPatientUser()
         initializePieChart()
 
 
@@ -89,21 +87,9 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun addButtonDropAction() {
-        val switchButton = root.findViewById(R.id.btn_switch) as Button
-        switchButton.setOnClickListener {
-            var bundle = bundleOf("fromFragment" to "fromSwitch")
-
-            findNavController().navigate(R.id.action_HomeFragment_to_SwitchFragment, bundle)
-        }
-    }
-
-    private fun addButtonSwitchAction() {
+    private fun addButtonPatientUser() {
         val dropButton = root.findViewById(R.id.btn_Drop) as Button
         dropButton.setOnClickListener {
-            var bundle = bundleOf("fromFragment" to "fromDrop")
-
-            //  findNavController().navigate(R.id.action_HomeFragment_to_DropFragment, bundle)
             findNavController().navigate(R.id.action_HomeFragment_to_PatientFragment)
         }
     }

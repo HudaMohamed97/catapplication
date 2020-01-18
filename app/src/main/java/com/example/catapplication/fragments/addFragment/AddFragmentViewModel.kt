@@ -12,7 +12,6 @@ class AddFragmentViewModel : ViewModel() {
     private var addFragmentRepository: AddFragmentRepository = AddFragmentRepository()
 
     fun getDoctorsList(userID: Int): MutableLiveData<DoctorsResponse> {
-        isLoading.value = true
         return addFragmentRepository.getDoctorsList(userID)
     }
 
@@ -32,8 +31,12 @@ class AddFragmentViewModel : ViewModel() {
         return addFragmentRepository.addPatient(patient)
     }
 
-    fun dropPatient(patientId: Int, map: HashMap<String, String>): MutableLiveData<ResponseBody> {
+    fun dropPatient(patientId: Int, map: HashMap<String, String>): MutableLiveData<DropResponse> {
         return addFragmentRepository.dropPatient(patientId, map)
+    }
+
+    fun switchPatient(patientId: Int, map: HashMap<String, String>): MutableLiveData<ResponseBody> {
+        return addFragmentRepository.switchPatient(patientId, map)
     }
 
 

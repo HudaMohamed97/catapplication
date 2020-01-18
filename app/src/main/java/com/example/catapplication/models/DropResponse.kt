@@ -1,7 +1,11 @@
+package com.example.catapplication.models
+
+import com.example.catapplication.models.Data
+import com.example.catapplication.models.patientDropData
 import com.google.gson.annotations.SerializedName
 
 /*
-Copyright (c) 2020 Kotlin com.example.catapplication.models.com.example.catapplication.models.com.example.catapplication.models.Data Classes Generated from JSON powered by http://www.json2kotlin.com
+Copyright (c) 2020 Kotlin com.example.catapplication.models.Data Classes Generated from JSON powered by http://www.json2kotlin.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -12,8 +16,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
 
-data class Pivot (
+data class DropResponse(
 
-	@SerializedName("user_id") val user_id : Int,
-	@SerializedName("hospital_id") val hospital_id : Int
+    @SerializedName("msg") val msg: String,
+    @SerializedName("data") val data: patientDropData,
+    @SerializedName("state") val state: Int
 )

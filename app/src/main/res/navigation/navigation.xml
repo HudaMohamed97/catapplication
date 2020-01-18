@@ -21,6 +21,18 @@
         tools:layout="@layout/patient_fragment">
 
 
+        <action
+            android:id="@+id/action_PatientFragment_to_SwitchFragment"
+            app:destination="@id/AddFragment">
+
+        </action>
+        <action
+            android:id="@+id/action_PatientFragment_to_DropFragment"
+            app:destination="@id/AddFragment">
+
+        </action>
+
+
     </fragment>
 
     <fragment
@@ -30,7 +42,7 @@
 
         <action
             android:id="@+id/action_HomeFragment_to_AddFragment"
-            app:destination="@id/AddFragment"></action>
+            app:destination="@id/AddFragment" />
         <action
             android:id="@+id/action_HomeFragment_to_DropFragment"
             app:destination="@id/AddFragment">

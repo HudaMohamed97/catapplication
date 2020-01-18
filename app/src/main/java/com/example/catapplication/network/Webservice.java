@@ -12,7 +12,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Webservice {
 
-    //Base Url
     private static final String MAIN_URL = "http://tasigna.cat-sw.com/api/";
     private static Webservice instance;
     private ApiServices api;
@@ -29,7 +28,6 @@ public class Webservice {
         httpClient.connectTimeout(160, TimeUnit.SECONDS);
         httpClient.readTimeout(160, TimeUnit.SECONDS);
         httpClient.addInterceptor(logging);
-
         Retrofit retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))

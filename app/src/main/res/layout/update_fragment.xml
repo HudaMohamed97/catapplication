@@ -121,17 +121,6 @@
         android:textColor="@color/cardview_light_background"
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_24"
-        android:layout_marginTop="@dimen/space_10"
-        android:layout_marginEnd="@dimen/space_24"
-        android:backgroundTint="@color/cardview_dark_background"
-        android:text="Switch"
-        android:textColor="@color/cardview_light_background"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_Drop"
@@ -141,7 +130,7 @@
         android:layout_marginTop="@dimen/space_10"
         android:layout_marginEnd="@dimen/space_24"
         android:backgroundTint="@color/cardview_dark_background"
-        android:text="Drop"
+        android:text="My Patients"
         android:textColor="@color/cardview_light_background"
         app:layout_constraintTop_toBottomOf="@+id/password" />
 

@@ -1,26 +1,26 @@
 package com.example.catapplication.fragments.addFragment
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.catapplication.R
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner
-import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.Button
-import android.widget.Toast
 import com.example.catapplication.models.*
-import java.util.HashMap
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.arrayListOf
+import kotlin.collections.set
 
 
 class AddUserFragment : Fragment() {
@@ -33,9 +33,12 @@ class AddUserFragment : Fragment() {
     private lateinit var spinnerCml: SearchableSpinner
     private lateinit var doctorsSpinner: SearchableSpinner
     private lateinit var spinnersDropReasons: SearchableSpinner
+    private lateinit var noteTitle: TextView
+    private lateinit var noteText: EditText
     private lateinit var addButton: Button
     private var selectedHospitalId = 0
     private var selectedDoctorId = 0
+    private var selectedReasonId = 0
     private var selectedRegionId = 0
     private var selectedCmlId = 0
     private var selectedDoseId = 0
@@ -52,6 +55,7 @@ class AddUserFragment : Fragment() {
     private val regionNameList = arrayListOf<String>()
     private val cmlNameList = arrayListOf<String>()
     private lateinit var FromFragment: String
+    private var PatientId = 0
     private var dialog: ProgressDialog? = null
 
 
@@ -69,44 +73,126 @@ class AddUserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         FromFragment = arguments?.getString("fromFragment").toString()
+        PatientId = arguments?.getInt("patientId")!!
         setViews()
         setListener()
-        listenToLoading()
-        callDoctorsList()
-        getRegionsList()
-        getCmlList()
+        if (FromFragment == "fromAdd") {
+            callDoctorsList()
+            getRegionsList()
+            getCmlList()
+        }
         if (FromFragment == "fromDrop") {
+            doctorsSpinner.visibility = View.GONE
+            spinnerCity.visibility = View.GONE
+            spinnerRegion.visibility = View.GONE
+            spinnerDose.visibility = View.GONE
+            spinnerCml.visibility = View.GONE
+            spinner.visibility = View.GONE
             spinnersDropReasons.visibility = View.VISIBLE
+            noteTitle.visibility = View.VISIBLE
+            noteText.visibility = View.VISIBLE
             addButton.text = "Drop"
             callReasonsList()
         }
         if (FromFragment == "fromSwitch") {
             addButton.text = "Switch To"
+            doctorsSpinner.visibility = View.GONE
+            spinnerCity.visibility = View.GONE
+            spinnerRegion.visibility = View.GONE
+            spinnerDose.visibility = View.VISIBLE
+            spinnerCml.visibility = View.VISIBLE
+            spinner.visibility = View.GONE
+            spinnersDropReasons.visibility = View.GONE
+            getCmlList()
         }
     }
 
     private fun setListener() {
         addButton.setOnClickListener {
-            if (selectedHospitalId == 0 || selectedDoctorId == 0 || selectedRegionId == 0 || selectedCityId == 0 || selectedCmlId == 0 || selectedDoseId == 0) {
-                Toast.makeText(activity, "Please Fill All Fields", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                if (FromFragment == "fromAdd") {
+            if (FromFragment == "fromAdd") {
+                if (selectedHospitalId == 0 || selectedDoctorId == 0 || selectedRegionId == 0 || selectedCityId == 0 || selectedCmlId == 0 || selectedDoseId == 0) {
+                    Toast.makeText(activity, "Please Fill All Fields", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
                     callAddPatient()
                 }
-                if (FromFragment == "fromDrop") {
-                    val patientId: Int = 2
+            }
+            if (FromFragment == "fromDrop") {
+                if (selectedReasonId == 0) {
+                    Toast.makeText(activity, "Please choose Reason", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Log.i("hhh", "PatientId" + PatientId)
                     val map = HashMap<String, String>()
-                    addFragmentViewModel.dropPatient(patientId, map).observe(this, Observer {
+                    map["user_id"] = getUserId().toString()
+                    map["reason_id"] = selectedReasonId.toString()
+                    map["notes"] = noteText.text.toString()
+                    showLoader()
+                    addFragmentViewModel.dropPatient(PatientId, map).observe(this, Observer {
+                        hideLoader()
+                        if (it == null) {
+                            Toast.makeText(
+                                activity,
+                                "Patient Dropped faild",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        } else {
+                            hideLoader()
+                            if (it.state == 1) {
+                                Toast.makeText(
+                                    activity,
+                                    "Patient Dropped Successfully",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    activity,
+                                    "Patient Dropped faild",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                        }
 
-                    }
-                    )
-
-
+                    })
                 }
-                if (FromFragment == "fromSwitch") {
+            }
+            if (FromFragment == "fromSwitch") {
+                if (selectedCmlId == 0 || selectedDoseId == 0) {
+                    Toast.makeText(activity, "Please choose cml and dose", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    val map = HashMap<String, String>()
+                    map["user_id"] = getUserId().toString()
+                    map["category_id"] = selectedCmlId.toString()
+                    map["product_id"] = selectedDoseId.toString()
+                    showLoader()
+                    addFragmentViewModel.switchPatient(PatientId, map).observe(this, Observer {
+                        hideLoader()
+                        if (it == null) {
+                            Toast.makeText(
+                                activity,
+                                "Patient Switched faild",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        } else {
+                            hideLoader()
 
+                            Toast.makeText(
+                                activity,
+                                "Patient Switched Successfully",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+
+                        }
+
+                    })
                 }
+
             }
 
 
@@ -172,6 +258,8 @@ class AddUserFragment : Fragment() {
         spinnerDose = root.findViewById(R.id.spinnerDose)
         addButton = root.findViewById(R.id.btn_Add)
         spinnersDropReasons = root.findViewById(R.id.spinnersDropReasons)
+        noteTitle = root.findViewById(R.id.noteText)
+        noteText = root.findViewById(R.id.result)
     }
 
     private fun initializeSpinner(spinner: SearchableSpinner, hospitalNameList: ArrayList<String>) {
@@ -317,8 +405,7 @@ class AddUserFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                parentView.getItemAtPosition(position).toString()
-                selectedDoctorId = ReasonsList[position].id
+                selectedReasonId = ReasonsList[position].id
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>) {
@@ -425,6 +512,7 @@ class AddUserFragment : Fragment() {
 
 
     private fun callDoctorsList() {
+        showLoader()
         addFragmentViewModel.getDoctorsList(getUserId()).observe(this, Observer {
             if (it != null) {
                 hideLoader()
@@ -432,6 +520,10 @@ class AddUserFragment : Fragment() {
                     hospitalDoctorsList.add(hospitalName)
                 }
                 prepareHospitalsList(hospitalDoctorsList)
+            } else {
+                hideLoader()
+                Toast.makeText(activity, "Network Error", Toast.LENGTH_SHORT)
+                    .show()
             }
         })
     }
