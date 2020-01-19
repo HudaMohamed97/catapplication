@@ -63,7 +63,6 @@ class AddFragmentRepository {
 
     fun getRegionsList(): MutableLiveData<List<RegionResponse>> {
         val regionData = MutableLiveData<List<RegionResponse>>()
-
         Webservice.getInstance().api.getRegions()
             .enqueue(object : Callback<List<RegionResponse>> {
                 override fun onResponse(
@@ -76,8 +75,8 @@ class AddFragmentRepository {
                         }
                     }
                 }
-
                 override fun onFailure(call: Call<List<RegionResponse>>, t: Throwable) {
+                    regionData.value = null
                     Log.i("hhhhhh", "faillll Region")
                 }
             })
@@ -162,7 +161,7 @@ class AddFragmentRepository {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             responseMessage.value = response.body()
-                            Log.i("hhhhhh","switched")
+                            Log.i("hhhhhh", "switched")
                         }
                     }
                 }
@@ -178,13 +177,13 @@ class AddFragmentRepository {
     fun loadPatientsDataOfDoctorByPage(
         drId: Int,
         pageNum: Int
-    ): MutableLiveData<ResponseBody> {
-        val responseMessage = MutableLiveData<ResponseBody>()
-        Webservice.getInstance().api.getPatientOfDoctorByPage(drId)
-            .enqueue(object : Callback<ResponseBody> {
+    ): MutableLiveData<PatientModelResponce> {
+        val responseMessage = MutableLiveData<PatientModelResponce>()
+        Webservice.getInstance().api.getPatientOfDoctorByPage(drId, pageNum)
+            .enqueue(object : Callback<PatientModelResponce> {
                 override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
+                    call: Call<PatientModelResponce>,
+                    response: Response<PatientModelResponce>
                 ) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
@@ -194,7 +193,7 @@ class AddFragmentRepository {
                     }
                 }
 
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                override fun onFailure(call: Call<PatientModelResponce>, t: Throwable) {
                     Log.i("hhhhhh", "fail get patients by doctor")
                     responseMessage.value = null
                 }
@@ -205,7 +204,7 @@ class AddFragmentRepository {
     // get Patients by user
     fun loadPatientsDataByUser(userId: Int, pageNum: Int): MutableLiveData<PatientModelResponce> {
         val responseMessage = MutableLiveData<PatientModelResponce>()
-        Webservice.getInstance().api.getPatientsByUserId(userId)
+        Webservice.getInstance().api.getPatientsByUserId(userId, pageNum)
             .enqueue(object : Callback<PatientModelResponce> {
                 override fun onResponse(
                     call: Call<PatientModelResponce>,
@@ -221,7 +220,7 @@ class AddFragmentRepository {
 
                 override fun onFailure(call: Call<PatientModelResponce>, t: Throwable) {
                     responseMessage.value = null
-                    Log.i("hhhhhh", "errroroo get patients")
+                    Log.i("hhhhhh", "errroroo get patients" + t.message)
 
 
                 }

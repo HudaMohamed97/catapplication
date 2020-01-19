@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -19,14 +20,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.catapplication.R
-import com.example.catapplication.models.Cities
 import com.example.catapplication.models.Doctors
 import com.example.catapplication.models.PatientRepData
 import com.nikhilpanju.recyclerviewenhanced.OnActivityTouchListener
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner
-import org.json.JSONArray
-import org.json.JSONObject
+import kotlinx.android.synthetic.main.patient_fragment.*
 
 class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListenerHelper {
     private lateinit var root: View
@@ -42,9 +41,13 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
     private var touchListener: OnActivityTouchListener? = null
     private var dialog: ProgressDialog? = null
     private lateinit var adapter: Patient_adapter
-    internal var mHasReachedBottomOnce = false
-    internal var currentPageNum = 1
-    internal var lastPageNum: Int = 0
+    var mHasReachedBottomOnce = false
+    var currentPageNum = 1
+    var connecttionType = 1
+    var lastPageNum: Int = 0
+    var lastPageNumPatient: Int = 0
+    private var storedSelctedDector = 0
+    private lateinit var myDataHolder: SharedPreferences.Editor
 
 
     override fun onCreateView(
@@ -60,14 +63,20 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setClickListeners()
+        shared = activity!!.getSharedPreferences("id", Context.MODE_PRIVATE)
         initRecyclerView()
-        callPatientsList()
         callDoctorsList()
+        callPatientsList(1, false)
+        val index = shared.getInt("storedSelctedDector", 0)
     }
 
     private fun setClickListeners() {
         spinner = root.findViewById(R.id.spinnerDoctors)
         recyclerView = root.findViewById(R.id.patientsRecycler)
+        val button = root.findViewById(R.id.back) as ImageView
+        button.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun callDoctorsList() {
@@ -83,16 +92,29 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
         })
     }
 
-    private fun callPatientsList() {
-        showLoader()
-        patientViewModel.getPatientsList(getUserId()).observe(this, Observer {
-            hideLoader()
+    private fun callPatientsList(pageId: Int, fromLoadMore: Boolean) {
+        if (fromLoadMore) {
+            loading.visibility = View.VISIBLE
+        } else {
+            showLoader()
+        }
+        patientViewModel.getPatientsList(getUserId(), pageId).observe(this, Observer {
+            if (fromLoadMore) {
+                loading.visibility = View.GONE
+            } else {
+                hideLoader()
+            }
             if (it != null) {
-                allPatientsList.clear()
-                for (patientData in it.data) {
-                    allPatientsList.add(patientData)
+                if (!fromLoadMore) {
+                    allPatientsList.clear()
+                }
+                lastPageNum = it.patientData.last_page
+                for (data in it.patientData.data) {
+                    allPatientsList.add(data)
                 }
                 adapter.notifyDataSetChanged()
+                mHasReachedBottomOnce = false
+                currentPageNum++
             } else {
                 hideLoader()
                 Toast.makeText(
@@ -106,98 +128,59 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
         })
     }
 
-    private fun callPatientsListByDoctor(selectedDoctorId: Int) {
-        showLoader()
-        patientViewModel.getPatientsListByDoctor(selectedDoctorId).observe(this, Observer {
-            Log.i("hhhh", "selectedDoctorId" + selectedDoctorId)
-            hideLoader()
-            if (it != null) {
-                val responseObject = JSONObject(it.string())
-                val state = responseObject.getInt("state")
-                if (state == 0) {
-                    Toast.makeText(
-                        activity,
-                        responseObject.getString("data"),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    val patientsObject = responseObject.getJSONObject("data")
-                    val patientsArray = patientsObject.getJSONArray("data")
-                    updatePatientsList(patientsArray)
-                    Log.d("Response", patientsObject.toString())
-                }
-            }
-            /* if (it != null) {
-                 it.
-
-                 allPatientsList.clear()
-                 for (patientData in it) {
-                     allPatientsList.add(patientData)
-                 }
-                 adapter.notifyDataSetChanged()
-             } else {
-                 hideLoader()
-                 Toast.makeText(
-                     activity,
-                     " there is an Error Occurs Wrong User or password",
-                     Toast.LENGTH_SHORT
-                 )
-                     .show()
-             }*/
-
-        })
-    }
-
-    fun updatePatientsList(list: JSONArray) {
-        allPatientsList.clear()
-        try {
-            for (i in 0 until list.length()) {
-                val currentobject = list.getJSONObject(i)
-                val id = currentobject.getInt("id")
-                val user_id = currentobject.getInt("user_id")
-                val category_id = currentobject.getInt("category_id")
-                val product_id = currentobject.getInt("product_id")
-                val hospital_id = currentobject.getInt("hospital_id")
-                val region_id = currentobject.getInt("region_id")
-                val doctor_id = currentobject.getInt("doctor_id")
-                val city_id = currentobject.getInt("city_id")
-                val dropped = currentobject.getInt("dropped")
-                val reason_id = currentobject.getString("reason_id")
-                val name = currentobject.getString("doctor_name")
-                val notes = currentobject.getString("notes")
-                val dose = currentobject.getString("dose_name")
-                val category = currentobject.getString("category_name")
-                val hospital = currentobject.getString("hospital_name")
-                val date = currentobject.getString("created_at")
-                val product_name = currentobject.getString("product_name")
-                allPatientsList.add(
-                    PatientRepData(
-                        id,
-                        user_id,
-                        category_id,
-                        product_id,
-                        hospital_id,
-                        region_id,
-                        doctor_id,
-                        city_id,
-                        dropped,
-                        reason_id,
-                        notes,
-                        date,
-                        category,
-                        product_name,
-                        dose,
-                        name,
-                        hospital
-                    )
-                )
-            }
-            adapter.notifyDataSetChanged()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
+    private fun callPatientsListByDoctor(selectedDoctorId: Int, pageId: Int, loadMore: Boolean) {
+        if (loadMore) {
+            loading.visibility = View.VISIBLE
+        } else {
+            showLoader()
         }
+        patientViewModel.getPatientsListByDoctor(selectedDoctorId, pageId).observe(this, Observer {
+            if (loadMore) {
+                loading.visibility = View.GONE
+            } else {
+                hideLoader()
+            }
+            if (it != null) {
+                if (!loadMore) {
+                    allPatientsList.clear()
+                }
+                if (it.state == 1) {
+                    lastPageNumPatient = it.patientData.last_page
+                    for (data in it.patientData.data) {
+                        allPatientsList.add(data)
+                    }
+                    adapter.notifyDataSetChanged()
+                    mHasReachedBottomOnce = false
+                    currentPageNum++
+                } else {
+                    adapter.notifyDataSetChanged()
+                    mHasReachedBottomOnce = false
+                    currentPageNum++
+                    if (loadMore) {
+                        Toast.makeText(
+                            activity,
+                            " No More Patients for the Doctor",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            activity,
+                            " No Patients for the Doctor",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
 
+            } else {
+                hideLoader()
+                Toast.makeText(
+                    activity,
+                    " there is an Network Error",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        })
     }
 
 
@@ -215,6 +198,7 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
 
 
     private fun prepareDoctorsList(doctorsList: ArrayList<Doctors>) {
+        doctorsNameList.add("All Doctors")
         for (doctor in doctorsList) {
             doctorsNameList.add(doctor.name)
         }
@@ -224,7 +208,6 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
     }
 
     private fun getUserId(): Int {
-        shared = activity!!.getSharedPreferences("id", Context.MODE_PRIVATE)
         return shared.getInt("id", 0)
     }
 
@@ -238,8 +221,20 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
                 position: Int,
                 id: Long
             ) {
-                selectedDoctorId = doctorsList[position].id
-                callPatientsListByDoctor(selectedDoctorId)
+                if (position == 0) {
+                    currentPageNum = 1
+                    callPatientsList(currentPageNum, false)
+                    connecttionType = 1
+                    storedSelctedDector = 0
+                } else {
+                    storedSelctedDector = position
+                    connecttionType = 2
+                    currentPageNum = 1
+                    selectedDoctorId = doctorsList[position - 1].id
+                    callPatientsListByDoctor(selectedDoctorId, currentPageNum, false)
+                }
+                myDataHolder = shared.edit()
+                myDataHolder.putInt("storedSelctedDector", storedSelctedDector)
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>) {
@@ -302,20 +297,23 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
             }
 
 
-        /* recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                 super.onScrollStateChanged(recyclerView, newState)
-
-                 if (!recyclerView.canScrollVertically(1) && !mHasReachedBottomOnce) {
-                     mHasReachedBottomOnce = true
-
-                     if (currentPageNum <= lastPageNum)
-                       //  callPatientsListByDoctor(selectedDoctorId, currentPageNum)
-
-
-                 }
-             }
-         })*/
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1) && !mHasReachedBottomOnce) {
+                    mHasReachedBottomOnce = true
+                    if (currentPageNum <= lastPageNum) {
+                        if (connecttionType == 1) {
+                            if (currentPageNum <= lastPageNum)
+                                callPatientsList(currentPageNum, true)
+                        } else if (connecttionType == 2) {
+                            if (currentPageNum <= lastPageNum)
+                                callPatientsListByDoctor(selectedDoctorId, currentPageNum, true)
+                        }
+                    }
+                }
+            }
+        })
     }
 
     override fun setOnActivityTouchListener(listener: OnActivityTouchListener?) {

@@ -26,7 +26,6 @@ public class Patient_adapter extends RecyclerView.Adapter<Patient_adapter.ViewHo
     private Context mContext;
 
     public Patient_adapter(Context context, ArrayList<PatientRepData> items) {
-
         this.mContext = context;
         this.items = items;
     }
@@ -56,6 +55,7 @@ public class Patient_adapter extends RecyclerView.Adapter<Patient_adapter.ViewHo
 
     @Override
     public int getItemCount() {
+        Log.i("hhhh", "" + items.size());
         return items.size();
     }
 

@@ -1,9 +1,9 @@
 package com.example.catapplication.fragments.addFragment
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.SharedPreferences
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,12 +14,12 @@ import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.example.catapplication.R
 import com.example.catapplication.models.*
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.arrayListOf
 import kotlin.collections.set
 
 
@@ -34,8 +34,10 @@ class AddUserFragment : Fragment() {
     private lateinit var doctorsSpinner: SearchableSpinner
     private lateinit var spinnersDropReasons: SearchableSpinner
     private lateinit var noteTitle: TextView
+    private lateinit var title: TextView
     private lateinit var noteText: EditText
-    private lateinit var addButton: Button
+    private lateinit var addButton: ImageView
+    private lateinit var back: ImageView
     private var selectedHospitalId = 0
     private var selectedDoctorId = 0
     private var selectedReasonId = 0
@@ -77,9 +79,12 @@ class AddUserFragment : Fragment() {
         setViews()
         setListener()
         if (FromFragment == "fromAdd") {
-            callDoctorsList()
             getRegionsList()
+            callDoctorsList()
             getCmlList()
+            addButton.setImageResource(R.drawable.addpatient)
+            title.text = "Add Patient"
+
         }
         if (FromFragment == "fromDrop") {
             doctorsSpinner.visibility = View.GONE
@@ -91,11 +96,12 @@ class AddUserFragment : Fragment() {
             spinnersDropReasons.visibility = View.VISIBLE
             noteTitle.visibility = View.VISIBLE
             noteText.visibility = View.VISIBLE
-            addButton.text = "Drop"
+            addButton.setImageResource(R.drawable.droppatient)
+            title.text = "Drop Patient"
             callReasonsList()
         }
         if (FromFragment == "fromSwitch") {
-            addButton.text = "Switch To"
+            addButton.setImageResource(R.drawable.switchpatient)
             doctorsSpinner.visibility = View.GONE
             spinnerCity.visibility = View.GONE
             spinnerRegion.visibility = View.GONE
@@ -103,6 +109,7 @@ class AddUserFragment : Fragment() {
             spinnerCml.visibility = View.VISIBLE
             spinner.visibility = View.GONE
             spinnersDropReasons.visibility = View.GONE
+            title.text = "Switch Patient"
             getCmlList()
         }
     }
@@ -122,7 +129,7 @@ class AddUserFragment : Fragment() {
                     Toast.makeText(activity, "Please choose Reason", Toast.LENGTH_SHORT)
                         .show()
                 } else {
-                    Log.i("hhh", "PatientId" + PatientId)
+                    Log.i("hhh", "" + PatientId)
                     val map = HashMap<String, String>()
                     map["user_id"] = getUserId().toString()
                     map["reason_id"] = selectedReasonId.toString()
@@ -137,6 +144,7 @@ class AddUserFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             )
                                 .show()
+                            openAlertDialog("Patient Dropped faild")
                         } else {
                             hideLoader()
                             if (it.state == 1) {
@@ -146,6 +154,7 @@ class AddUserFragment : Fragment() {
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
+                                openAlertDialog("Patient Dropped Successfully")
                             } else {
                                 Toast.makeText(
                                     activity,
@@ -153,6 +162,7 @@ class AddUserFragment : Fragment() {
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
+                                openAlertDialog("Patient Dropped failed")
                             }
                         }
 
@@ -178,9 +188,10 @@ class AddUserFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             )
                                 .show()
+                            openAlertDialog("Patient Switched faild")
                         } else {
                             hideLoader()
-
+                            openAlertDialog("Patient Switched Successfully")
                             Toast.makeText(
                                 activity,
                                 "Patient Switched Successfully",
@@ -194,10 +205,10 @@ class AddUserFragment : Fragment() {
                 }
 
             }
-
-
         }
-
+        back.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
 
@@ -238,6 +249,7 @@ class AddUserFragment : Fragment() {
             if (it.state == 1) {
                 Toast.makeText(activity, it.msg, Toast.LENGTH_SHORT).show()
             } else {
+                openAlertDialog("Patient Not Updated Please Try Again, Thanks")
                 Toast.makeText(
                     activity,
                     "Patient Not Updated Please Try Again, Thanks",
@@ -260,6 +272,8 @@ class AddUserFragment : Fragment() {
         spinnersDropReasons = root.findViewById(R.id.spinnersDropReasons)
         noteTitle = root.findViewById(R.id.noteText)
         noteText = root.findViewById(R.id.result)
+        title = root.findViewById(R.id.title)
+        back = root.findViewById(R.id.back)
     }
 
     private fun initializeSpinner(spinner: SearchableSpinner, hospitalNameList: ArrayList<String>) {
@@ -512,16 +526,13 @@ class AddUserFragment : Fragment() {
 
 
     private fun callDoctorsList() {
-        showLoader()
         addFragmentViewModel.getDoctorsList(getUserId()).observe(this, Observer {
             if (it != null) {
-                hideLoader()
                 for (hospitalName in it.data) {
                     hospitalDoctorsList.add(hospitalName)
                 }
                 prepareHospitalsList(hospitalDoctorsList)
             } else {
-                hideLoader()
                 Toast.makeText(activity, "Network Error", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -540,12 +551,18 @@ class AddUserFragment : Fragment() {
     }
 
     private fun getRegionsList() {
+        showLoader()
         addFragmentViewModel.getRegionsList().observe(this, Observer {
             if (it != null) {
+                hideLoader()
                 for (region in it) {
                     regionList.add(region)
                 }
                 prepareRegionsList(regionList)
+            } else {
+                hideLoader()
+                Toast.makeText(activity, "Network Error", Toast.LENGTH_SHORT)
+                    .show()
             }
         })
     }
@@ -625,5 +642,16 @@ class AddUserFragment : Fragment() {
         return shared.getInt("id", 0)
     }
 
+
+    private fun openAlertDialog(massage: String) {
+        val builder1 = AlertDialog.Builder(activity)
+        builder1.setMessage(massage)
+        builder1.setCancelable(true)
+        builder1.setPositiveButton(
+            "ok"
+        ) { dialog, id -> dialog.cancel() }
+        val alert = builder1.create()
+        alert.show()
+    }
 
 }

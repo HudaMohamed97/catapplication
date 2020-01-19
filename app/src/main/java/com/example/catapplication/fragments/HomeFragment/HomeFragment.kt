@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -38,8 +39,10 @@ class HomeFragment : Fragment() {
         addButtonAction()
         addButtonPatientUser()
         initializePieChart()
-
-
+        val button = root.findViewById(R.id.back) as ImageView
+        button.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun initializePieChart() {
@@ -80,7 +83,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun addButtonAction() {
-        val button = root.findViewById(R.id.btn_Add) as Button
+        val button = root.findViewById(R.id.btn_Add) as ImageView
         button.setOnClickListener {
             var bundle = bundleOf("fromFragment" to "fromAdd")
             findNavController().navigate(R.id.action_HomeFragment_to_AddFragment, bundle)
@@ -88,7 +91,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun addButtonPatientUser() {
-        val dropButton = root.findViewById(R.id.btn_Drop) as Button
+        val dropButton = root.findViewById(R.id.allpatients) as ImageView
         dropButton.setOnClickListener {
             findNavController().navigate(R.id.action_HomeFragment_to_PatientFragment)
         }

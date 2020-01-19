@@ -14,11 +14,11 @@ class PatientViewModel : ViewModel() {
         return addFragmentRepository.getDoctorsListByUser(userID)
     }
 
-    fun getPatientsList(userID: Int): MutableLiveData<PatientModelResponce> {
-        return addFragmentRepository.loadPatientsDataByUser(userID, 1)
+    fun getPatientsList(userID: Int, pageId: Int): MutableLiveData<PatientModelResponce> {
+        return addFragmentRepository.loadPatientsDataByUser(userID, pageId)
     }
 
-    fun getPatientsListByDoctor(userID: Int): MutableLiveData<ResponseBody> {
-        return addFragmentRepository.loadPatientsDataOfDoctorByPage(userID, 1)
+    fun getPatientsListByDoctor(userID: Int, pageId: Int): MutableLiveData<PatientModelResponce> {
+        return addFragmentRepository.loadPatientsDataOfDoctorByPage(userID, pageId)
     }
 }

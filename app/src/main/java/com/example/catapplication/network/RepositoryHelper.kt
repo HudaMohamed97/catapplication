@@ -11,7 +11,7 @@ class RepositoryHelper : RepositoryInterface {
     override fun login(email: String, password: String): MutableLiveData<DataResponse> {
         val userData = MutableLiveData<DataResponse>()
         val body = mapOf(
-            "email" to email,
+            "email" to email.trim(),
             "password" to password
         )
         Webservice.getInstance().api.login(body).enqueue(object : Callback<DataResponse> {
@@ -27,6 +27,7 @@ class RepositoryHelper : RepositoryInterface {
             override fun onFailure(call: Call<DataResponse>, t: Throwable) {
                 userData.value = null
                 Log.i("hhhhhh", "on fail")
+                Log.i("hhhhhh", "on fail" + t.message)
 
             }
         })

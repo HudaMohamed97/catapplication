@@ -14,22 +14,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
 
-data class PatientRepData (
-	@SerializedName("id") val id : Int,
-	@SerializedName("user_id") val user_id : Int,
-	@SerializedName("category_id") val category_id : Int,
-	@SerializedName("product_id") val product_id : Int,
-	@SerializedName("hospital_id") val hospital_id : Int,
-	@SerializedName("region_id") val region_id : Int,
-	@SerializedName("doctor_id") val doctor_id : Int,
-	@SerializedName("city_id") val city_id : Int,
-	@SerializedName("dropped") val dropped : Int,
-	@SerializedName("reason_id") val reason_id : String,
-	@SerializedName("notes") val notes : String,
-	@SerializedName("created_at") val created_at : String,
-	@SerializedName("category_name") val category_name : String,
-	@SerializedName("product_name") val product_name : String,
-	@SerializedName("dose_name") val dose_name : String,
-	@SerializedName("doctor_name") val doctor_name : String,
-	@SerializedName("hospital_name") val hospital_name : String
+data class PatientRepData(
+    @SerializedName("id") val id: Int,
+    @SerializedName("user_id") val user_id: Int,
+    @SerializedName("dropped") val dropped: Int,
+    @SerializedName("reason_id") val reason_id: String,
+    @SerializedName("notes") val notes: String,
+    @SerializedName("created_at") val created_at: String,
+    @SerializedName("category_name") val category_name: String,
+    @SerializedName("product_name") val product_name: String,
+    @SerializedName("doctor_name") val doctor_name: String,
+    @SerializedName("hospital_name") val hospital_name: String,
+    @SerializedName("region_name") val region_name: String,
+    @SerializedName("city_name") val city_name: String,
+    @SerializedName("flm_name") val flm_name: String
 )

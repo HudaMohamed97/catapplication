@@ -8,8 +8,7 @@ import retrofit2.http.*
 interface ApiServices {
 
     @POST("login")
-    @FormUrlEncoded
-    fun login(@FieldMap body: Map<String, String>): Call<DataResponse>
+    fun login(@Body body: Map<String, String>): Call<DataResponse>
 
     @POST("add-patient")
     @FormUrlEncoded
@@ -30,11 +29,11 @@ interface ApiServices {
 
 
     @GET("user/{userId}/logs")
-    fun getPatientsByUserId(@Path("userId") userId: Int): Call<PatientModelResponce>
+    fun getPatientsByUserId(@Path("userId") userId: Int, @Query("page") page: Int): Call<PatientModelResponce>
 
 
     @GET("patient-list/{doctorId}")
-    fun getPatientOfDoctorByPage(@Path("doctorId") doctorId: Int): Call<ResponseBody>
+    fun getPatientOfDoctorByPage(@Path("doctorId") doctorId: Int, @Query("page") page: Int): Call<PatientModelResponce>
 
     @GET("user-doctor-list/{userId}")
     fun getDoctorsByUser(@Path("userId") userId: Int): Call<UserDoctorsResponse>

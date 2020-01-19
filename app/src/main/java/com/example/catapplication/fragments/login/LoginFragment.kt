@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -69,7 +71,7 @@ class LoginFragment : Fragment(), LoginInterface {
 
     override fun setClickListeners() {
         val mainLayout = root.findViewById(R.id.mainLayout) as View
-        val button = root.findViewById(R.id.btn_login) as Button
+        val button = root.findViewById(R.id.btn_login) as ImageView
         email = root.findViewById(R.id.email) as TextInputLayout
         passwordEt = root.findViewById(R.id.password) as TextInputLayout
 
@@ -105,14 +107,18 @@ class LoginFragment : Fragment(), LoginInterface {
                     loginViewModel.saveData(it.data, activity!!)
                     findNavController().navigate(R.id.action_loginFragment_to_updateFragment)
                 } else {
-                    Toast.makeText(activity, "Wrong User or password", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        activity,
+                        "Wrong User or password" + it.message,
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             } else {
                 hideLoader()
                 Toast.makeText(
                     activity,
-                    " there is an Error Occurs Wrong User or password",
+                    "Network Error",
                     Toast.LENGTH_SHORT
                 )
                     .show()
