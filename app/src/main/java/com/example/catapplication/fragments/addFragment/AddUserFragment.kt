@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ class AddUserFragment : Fragment() {
 
     private lateinit var root: View
     private lateinit var spinner: SearchableSpinner
+    private lateinit var mainLayout: View
     private lateinit var spinnerDose: SearchableSpinner
     private lateinit var spinnerCity: SearchableSpinner
     private lateinit var spinnerRegion: SearchableSpinner
@@ -115,7 +117,11 @@ class AddUserFragment : Fragment() {
     }
 
     private fun setListener() {
+        mainLayout.setOnClickListener {
+            hideKeyboard()
+        }
         addButton.setOnClickListener {
+            hideKeyboard()
             if (FromFragment == "fromAdd") {
                 if (selectedHospitalId == 0 || selectedDoctorId == 0 || selectedRegionId == 0 || selectedCityId == 0 || selectedCmlId == 0 || selectedDoseId == 0) {
                     Toast.makeText(activity, "Please Fill All Fields", Toast.LENGTH_SHORT)
@@ -274,6 +280,7 @@ class AddUserFragment : Fragment() {
         noteText = root.findViewById(R.id.result)
         title = root.findViewById(R.id.title)
         back = root.findViewById(R.id.back)
+        mainLayout = root.findViewById(R.id.mainLayout) as View
     }
 
     private fun initializeSpinner(spinner: SearchableSpinner, hospitalNameList: ArrayList<String>) {
@@ -652,6 +659,17 @@ class AddUserFragment : Fragment() {
         ) { dialog, id -> dialog.cancel() }
         val alert = builder1.create()
         alert.show()
+
+
+    }
+
+    private fun hideKeyboard() {
+        val view = activity?.currentFocus
+        if (view != null) {
+            val imm =
+                context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm!!.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
 }

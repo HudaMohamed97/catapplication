@@ -81,6 +81,7 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
 
     private fun callDoctorsList() {
         patientViewModel.getDoctorsList(getUserId()).observe(this, Observer {
+            nopatienttext.visibility = View.GONE
             if (it != null) {
                 for (doctor in it.data) {
                     doctorsList.add(doctor)
@@ -99,6 +100,7 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
             showLoader()
         }
         patientViewModel.getPatientsList(getUserId(), pageId).observe(this, Observer {
+            nopatienttext.visibility = View.GONE
             if (fromLoadMore) {
                 loading.visibility = View.GONE
             } else {
@@ -145,6 +147,7 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
                     allPatientsList.clear()
                 }
                 if (it.state == 1) {
+                    nopatienttext.visibility = View.GONE
                     lastPageNumPatient = it.patientData.last_page
                     for (data in it.patientData.data) {
                         allPatientsList.add(data)
@@ -157,12 +160,14 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
                     mHasReachedBottomOnce = false
                     currentPageNum++
                     if (loadMore) {
+                        nopatienttext.visibility = View.GONE
                         Toast.makeText(
                             activity,
                             " No More Patients for the Doctor",
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
+                        nopatienttext.visibility = View.VISIBLE
                         Toast.makeText(
                             activity,
                             " No Patients for the Doctor",
@@ -172,6 +177,7 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
                 }
 
             } else {
+                nopatienttext.visibility = View.GONE
                 hideLoader()
                 Toast.makeText(
                     activity,
@@ -274,20 +280,14 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
                 R.id.rowBG
             ) { viewID, position ->
                 if (viewID == R.id.edit) {
-                    Log.i("hhhh", "" + viewID)
                     val patientId = allPatientsList[position].id
                     var bundle = bundleOf("fromFragment" to "fromSwitch", "patientId" to patientId)
                     findNavController().navigate(
                         R.id.action_PatientFragment_to_SwitchFragment,
                         bundle
                     )
-                    Toast.makeText(activity, "clicked", Toast.LENGTH_SHORT)
-                        .show()
-
-
                 } else if (viewID == R.id.delete) {
                     val patientId = allPatientsList[position].id
-                    Log.i("hhhh", "" + patientId)
                     var bundle = bundleOf("fromFragment" to "fromDrop", "patientId" to patientId)
                     findNavController().navigate(
                         R.id.action_PatientFragment_to_SwitchFragment,

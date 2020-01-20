@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login">
+    android:background="@drawable/login"
+    android:id="@+id/mainLayout"
+    android:clickable="true"
+    android:focusable="true">
 
     <RelativeLayout
         android:id="@+id/top"
@@ -167,9 +170,11 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/white_rounded_button"
             android:gravity="left"
+            android:padding="5dp"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="RtlHardcoded" />
 
 
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner

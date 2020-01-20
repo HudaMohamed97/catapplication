@@ -23,6 +23,8 @@ class HomeFragment : Fragment() {
     private lateinit var root: View
     private val df2 = DecimalFormat("#.##")
     lateinit var shared: SharedPreferences
+    private var scoredPercentage: Int = 0
+    private var unscoredPrecentage: Int = 0
 
 
     override fun onCreateView(
@@ -48,8 +50,13 @@ class HomeFragment : Fragment() {
     private fun initializePieChart() {
         shared = activity!!.getSharedPreferences("id", Context.MODE_PRIVATE)
         val target = shared.getInt("target", 0)
+        val score = shared.getInt("score", 0)
+        scoredPercentage = shared.getInt("percentage", 0)
+        unscoredPrecentage = 100 - scoredPercentage
+        val unscored = target - score
         target_text.text = target.toString()
-
+        scoredtxt.text = score.toString()
+        unscoredtxt.text = unscored.toString()
         val mAnimatedPieView = root.findViewById<AnimatedPieView>(R.id.animatedPieView)
         val config = AnimatedPieViewConfig()
 
@@ -66,16 +73,16 @@ class HomeFragment : Fragment() {
 
         config.addData(
             SimplePieInfo(
-                22.0,
+                unscored.toDouble(),
                 ContextCompat.getColor(context!!, R.color.red),
-                "" + df2.format(80) + " %"
+                "" + df2.format(unscoredPrecentage) + " %"
             )
         )
             .addData(
                 SimplePieInfo(
-                    55.0,
-                    ContextCompat.getColor(context!!, R.color.colorAccent),
-                    "" + df2.format(55) + " %"
+                    score.toDouble(),
+                    ContextCompat.getColor(context!!, R.color.yellow),
+                    "" + df2.format(scoredPercentage) + " %"
                 )
             )
         mAnimatedPieView.applyConfig(config)

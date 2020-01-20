@@ -59,8 +59,8 @@
             android:layout_marginRight="30dp"
             android:adjustViewBounds="true"
             android:clickable="true"
-            android:visibility="gone"
-            android:src="@drawable/usericon" />
+            android:src="@drawable/usericon"
+            android:visibility="gone" />
 
 
         <ImageView
@@ -93,11 +93,26 @@
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:hintText="Choose Doctor" />
 
+
+        <TextView
+            android:id="@+id/nopatienttext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:gravity="center_horizontal"
+            android:text="No patients Added"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/patientsRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp" />
+
 
     </LinearLayout>
 
