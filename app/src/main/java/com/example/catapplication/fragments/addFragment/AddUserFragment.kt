@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.catapplication.R
 import com.example.catapplication.models.*
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner
+import kotlinx.android.synthetic.main.add_user_fragment.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
@@ -92,6 +93,9 @@ class AddUserFragment : Fragment() {
             doctorsSpinner.visibility = View.GONE
             spinnerCity.visibility = View.GONE
             spinnerRegion.visibility = View.GONE
+            doseText.visibility = View.GONE
+            cityText.visibility = View.GONE
+            doctorText.visibility = View.GONE
             spinnerDose.visibility = View.GONE
             spinnerCml.visibility = View.GONE
             spinner.visibility = View.GONE
@@ -103,7 +107,10 @@ class AddUserFragment : Fragment() {
             callReasonsList()
         }
         if (FromFragment == "fromSwitch") {
-            addButton.setImageResource(R.drawable.switchpatient)
+            addButton.setImageResource(R.drawable.droppatient)
+            doseText.visibility = View.GONE
+            cityText.visibility = View.GONE
+            doctorText.visibility = View.GONE
             doctorsSpinner.visibility = View.GONE
             spinnerCity.visibility = View.GONE
             spinnerRegion.visibility = View.GONE
@@ -269,11 +276,33 @@ class AddUserFragment : Fragment() {
     private fun setViews() {
         spinner = root.findViewById(R.id.spinnerHospital)
         doctorsSpinner = root.findViewById(R.id.spinnerDoctorName)
-        initializeDoctorsSpinner(doctorsSpinner, ArrayList(), ArrayList())
+        doctorText.setOnClickListener {
+            Toast.makeText(
+                activity,
+                "Please Choose Hospital First",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        //  initializeDoctorsSpinner(doctorsSpinner, ArrayList(), ArrayList())
         spinnerRegion = root.findViewById(R.id.spinnerRegion)
         spinnerCity = root.findViewById(R.id.spinnerCity)
+        cityText.setOnClickListener {
+            Toast.makeText(
+                activity,
+                "Please Choose Region First",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
         spinnerCml = root.findViewById(R.id.spinnerCml)
         spinnerDose = root.findViewById(R.id.spinnerDose)
+        doseText.setOnClickListener {
+            Toast.makeText(
+                activity,
+                "Please Choose CML First",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
         addButton = root.findViewById(R.id.btn_Add)
         spinnersDropReasons = root.findViewById(R.id.spinnersDropReasons)
         noteTitle = root.findViewById(R.id.noteText)
@@ -381,6 +410,8 @@ class AddUserFragment : Fragment() {
         hospitalNameList: ArrayList<String>
         , hospitalsDoctorsList: ArrayList<Doctors>
     ) {
+        doctorText.visibility = View.GONE
+        doctorsSpinner.visibility = View.VISIBLE
         val arrayAdapter =
             context?.let { ArrayAdapter(it, R.layout.spinner_item, hospitalNameList) }
 
@@ -443,6 +474,9 @@ class AddUserFragment : Fragment() {
         cityNameList: ArrayList<String>
         , cityList: ArrayList<Cities>
     ) {
+        cityText.visibility = View.GONE
+        spinnerCity.visibility = View.VISIBLE
+
         val arrayAdapter =
             context?.let { ArrayAdapter(it, R.layout.spinner_item, cityNameList) }
 
@@ -473,6 +507,10 @@ class AddUserFragment : Fragment() {
         spinner: SearchableSpinner,
         doseNameList: ArrayList<String>, doseList: ArrayList<Products>
     ) {
+
+        doseText.visibility = View.GONE
+        spinnerDose.visibility = View.VISIBLE
+
         val arrayAdapter =
             context?.let { ArrayAdapter(it, R.layout.spinner_item, doseNameList) }
 

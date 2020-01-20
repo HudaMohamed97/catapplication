@@ -39,7 +39,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addButtonAction()
-        addButtonPatientUser()
+        dropButtonPatientUser()
+        switchButtonPatientUser()
         initializePieChart()
         val button = root.findViewById(R.id.back) as ImageView
         button.setOnClickListener {
@@ -97,8 +98,15 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun addButtonPatientUser() {
-        val dropButton = root.findViewById(R.id.allpatients) as ImageView
+    private fun dropButtonPatientUser() {
+        val dropButton = root.findViewById(R.id.btn_drop) as ImageView
+        dropButton.setOnClickListener {
+            findNavController().navigate(R.id.action_HomeFragment_to_PatientFragment)
+        }
+    }
+
+    private fun switchButtonPatientUser() {
+        val dropButton = root.findViewById(R.id.btn_Switch) as ImageView
         dropButton.setOnClickListener {
             findNavController().navigate(R.id.action_HomeFragment_to_PatientFragment)
         }
