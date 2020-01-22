@@ -87,6 +87,21 @@
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:hintText="Region" />
 
+
+        <TextView
+            android:id="@+id/cityText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/editbox"
+            android:clickable="true"
+            android:padding="10dp"
+            android:text="City"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:theme="@style/ThemeOverlay.AppCompat.Light" />
+
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinnerCity"
             android:layout_width="match_parent"
@@ -94,6 +109,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/editbox"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:visibility="gone"
             app:hintText="City" />
 
 
@@ -108,6 +124,21 @@
             app:hintText="Hospital" />
 
 
+        <TextView
+            android:id="@+id/doctorText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/editbox"
+            android:clickable="true"
+            android:padding="11dp"
+            android:text="Doctor Name"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:theme="@style/ThemeOverlay.AppCompat.Light" />
+
+
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinnerDoctorName"
             android:layout_width="match_parent"
@@ -119,6 +150,7 @@
             android:focusableInTouchMode="true"
             android:spinnerMode="dropdown"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:visibility="gone"
             app:hintText="Doctor Name" />
 
 
@@ -131,6 +163,22 @@
             android:theme="@style/ThemeOverlay.AppCompat.Light"
             app:hintText="CMl" />
 
+
+        <TextView
+            android:id="@+id/doseText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/editbox"
+            android:clickable="true"
+            android:padding="11dp"
+            android:text="Dose"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:theme="@style/ThemeOverlay.AppCompat.Light" />
+
+
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinnerDose"
             android:layout_width="match_parent"
@@ -138,6 +186,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/editbox"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:visibility="gone"
             app:hintText="Dose" />
 
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
@@ -195,6 +244,7 @@
             android:layout_marginStart="@dimen/space_24"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="@dimen/space_24"
+            android:layout_marginBottom="10dp"
             android:clickable="true"
             android:src="@drawable/addpatient"
             android:text="Add"

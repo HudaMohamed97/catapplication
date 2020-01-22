@@ -107,7 +107,7 @@ class AddUserFragment : Fragment() {
             callReasonsList()
         }
         if (FromFragment == "fromSwitch") {
-            addButton.setImageResource(R.drawable.droppatient)
+            addButton.setImageResource(R.drawable.switchpatient)
             doseText.visibility = View.GONE
             cityText.visibility = View.GONE
             doctorText.visibility = View.GONE

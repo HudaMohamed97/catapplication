@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.example.catapplication.models.*
 import com.example.catapplication.network.AddFragmentRepository
 import okhttp3.ResponseBody
-import retrofit2.Response
 
 class AddFragmentViewModel : ViewModel() {
     val isLoading = MutableLiveData<Boolean>().apply { value = false }
