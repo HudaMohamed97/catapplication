@@ -29,7 +29,6 @@
                 android:src="@drawable/logo"
                 android:visibility="invisible" />
 
-
         </LinearLayout>
 
     </RelativeLayout>
@@ -52,15 +51,15 @@
 
         <ImageView
             android:id="@+id/allpatients"
-            android:layout_width="20dp"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
             android:adjustViewBounds="true"
             android:clickable="true"
-            android:src="@drawable/usericon"
-            android:visibility="gone" />
+            android:src="@drawable/ic_users"
+            android:visibility="visible" />
 
 
         <ImageView
@@ -84,13 +83,61 @@
         android:orientation="vertical">
 
 
+        <TextView
+            android:id="@+id/HospitalText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/editbox"
+            android:clickable="true"
+            android:padding="11dp"
+            android:text="Choose Hospital"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:visibility="gone" />
+
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-            android:id="@+id/spinnerDoctors"
+            android:id="@+id/spinnerHospital"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:background="@drawable/editbox"
             android:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:hintText="Hospital" />
+
+        <TextView
+            android:id="@+id/doctorText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/editbox"
+            android:clickable="true"
+            android:padding="11dp"
+            android:text="Choose Doctor"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:theme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+            android:id="@+id/spinnerDoctors"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/editbox"
+            android:spinnerMode="dialog"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:visibility="gone"
             app:hintText="Choose Doctor" />
 
 
@@ -106,13 +153,11 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/patientsRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp" />
-
 
     </LinearLayout>
 

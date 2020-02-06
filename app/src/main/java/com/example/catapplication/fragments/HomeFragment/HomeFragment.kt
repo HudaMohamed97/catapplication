@@ -101,14 +101,16 @@ class HomeFragment : Fragment() {
     private fun dropButtonPatientUser() {
         val dropButton = root.findViewById(R.id.btn_drop) as ImageView
         dropButton.setOnClickListener {
-            findNavController().navigate(R.id.action_HomeFragment_to_PatientFragment)
+            var bundle = bundleOf("fromFragment" to "fromDrop")
+            findNavController().navigate(R.id.action_HomeFragment_to_PatientFragment, bundle)
         }
     }
 
     private fun switchButtonPatientUser() {
         val dropButton = root.findViewById(R.id.btn_Switch) as ImageView
         dropButton.setOnClickListener {
-            findNavController().navigate(R.id.action_HomeFragment_to_PatientFragment)
+            var bundle = bundleOf("fromFragment" to "fromSwitch")
+            findNavController().navigate(R.id.action_HomeFragment_to_PatientFragment, bundle)
         }
     }
 }

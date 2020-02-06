@@ -4,7 +4,6 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,22 +20,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.catapplication.R
 import com.example.catapplication.models.Doctors
+import com.example.catapplication.models.DoctorsHospiatalResponce
 import com.example.catapplication.models.PatientRepData
 import com.nikhilpanju.recyclerviewenhanced.OnActivityTouchListener
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import kotlinx.android.synthetic.main.patient_fragment.*
+import kotlinx.android.synthetic.main.patient_fragment.doctorText
+import android.widget.TextView
+import android.graphics.Color
 
-class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListenerHelper {
+
+class PatientsFragment : Fragment() {
     private lateinit var root: View
     private lateinit var patientViewModel: PatientViewModel
-    private lateinit var spinner: SearchableSpinner
+    private lateinit var doctorSpinner: SearchableSpinner
+    private lateinit var hospitalSpinner: SearchableSpinner
     private lateinit var recyclerView: RecyclerView
     private var selectedDoctorId = 0
     lateinit var shared: SharedPreferences
-    private val doctorsList = arrayListOf<Doctors>()
     private val allPatientsList = arrayListOf<PatientRepData>()
-    private val doctorsNameList = arrayListOf<String>()
     private var onTouchListener: RecyclerTouchListener? = null
     private var touchListener: OnActivityTouchListener? = null
     private var dialog: ProgressDialog? = null
@@ -45,9 +48,12 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
     var currentPageNum = 1
     var connecttionType = 1
     var lastPageNum: Int = 0
+    private var selectedHospitalId = 0
+    private val hospitalDoctorsList = arrayListOf<DoctorsHospiatalResponce>()
     var lastPageNumPatient: Int = 0
     private var storedSelctedDector = 0
     private lateinit var myDataHolder: SharedPreferences.Editor
+    private lateinit var FromFragment: String
 
 
     override fun onCreateView(
@@ -63,35 +69,59 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setClickListeners()
+        FromFragment = arguments?.getString("fromFragment").toString()
         shared = activity!!.getSharedPreferences("id", Context.MODE_PRIVATE)
         initRecyclerView()
-        callDoctorsList()
+        callHospitalDoctorsList()
         callPatientsList(1, false)
-        val index = shared.getInt("storedSelctedDector", 0)
+
     }
 
     private fun setClickListeners() {
-        spinner = root.findViewById(R.id.spinnerDoctors)
+        doctorSpinner = root.findViewById(R.id.spinnerDoctors)
+        hospitalSpinner = root.findViewById(R.id.spinnerHospital)
         recyclerView = root.findViewById(R.id.patientsRecycler)
+        doctorText.setOnClickListener {
+            Toast.makeText(activity, "Please Choose Hospital First", Toast.LENGTH_SHORT).show()
+        }
         val button = root.findViewById(R.id.back) as ImageView
         button.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        allpatients.setOnClickListener {
+            currentPageNum = 1
+            callPatientsList(currentPageNum, false)
+            connecttionType = 1
+            storedSelctedDector = 0
+
+        }
+
     }
 
-    private fun callDoctorsList() {
+
+    private fun callHospitalDoctorsList() {
         patientViewModel.getDoctorsList(getUserId()).observe(this, Observer {
-            nopatienttext.visibility = View.GONE
             if (it != null) {
-                for (doctor in it.data) {
-                    doctorsList.add(doctor)
+                for (hospitalName in it.data) {
+                    hospitalDoctorsList.add(hospitalName)
                 }
-                prepareDoctorsList(doctorsList)
+                prepareHospitalsList(hospitalDoctorsList)
+            } else {
+                Toast.makeText(activity, "Network Error", Toast.LENGTH_SHORT)
+                    .show()
             }
-
-
         })
     }
+
+    private fun prepareHospitalsList(hospitalDoctorsList: ArrayList<DoctorsHospiatalResponce>) {
+        val hospitalNameList = arrayListOf<String>()
+        for (hospital in hospitalDoctorsList) {
+            hospitalNameList.add(hospital.name)
+        }
+        initializeHospitalSpinner(hospitalSpinner, hospitalNameList)
+    }
+
 
     private fun callPatientsList(pageId: Int, fromLoadMore: Boolean) {
         if (fromLoadMore) {
@@ -203,23 +233,30 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
     }
 
 
-    private fun prepareDoctorsList(doctorsList: ArrayList<Doctors>) {
-        doctorsNameList.add("All Doctors")
-        for (doctor in doctorsList) {
+    private fun prepareDoctorsList(doctors: ArrayList<Doctors>) {
+        val doctorsNameList = arrayListOf<String>()
+        var doctorsList = arrayListOf<Doctors>()
+        for (doctor in doctors) {
+            doctorsList.add(doctor)
             doctorsNameList.add(doctor.name)
         }
-        initializeSpinner(spinner, doctorsNameList)
-
-
+        initializeSpinner(doctorSpinner, doctorsNameList, doctorsList)
     }
 
     private fun getUserId(): Int {
         return shared.getInt("id", 0)
     }
 
-    private fun initializeSpinner(spinner: SearchableSpinner, doctorsNameList: ArrayList<String>) {
+
+    private fun initializeHospitalSpinner(
+        spinner: SearchableSpinner,
+        hospitalNameList: ArrayList<String>
+    ) {
         val arrayAdapter =
-            context?.let { ArrayAdapter(it, R.layout.spinner_item, doctorsNameList) }
+            context?.let {
+                ArrayAdapter(it, R.layout.spinner_item, hospitalNameList)
+
+            }
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>,
@@ -227,18 +264,45 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
                 position: Int,
                 id: Long
             ) {
-                if (position == 0) {
-                    currentPageNum = 1
-                    callPatientsList(currentPageNum, false)
-                    connecttionType = 1
-                    storedSelctedDector = 0
-                } else {
-                    storedSelctedDector = position
-                    connecttionType = 2
-                    currentPageNum = 1
-                    selectedDoctorId = doctorsList[position - 1].id
-                    callPatientsListByDoctor(selectedDoctorId, currentPageNum, false)
-                }
+
+                selectedHospitalId = hospitalDoctorsList[position].id
+                prepareDoctorsList(hospitalDoctorsList[position].doctors as ArrayList<Doctors>)
+
+
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>) {
+                // your code here
+            }
+        }
+        arrayAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        if (arrayAdapter != null) {
+            spinner.adapter = arrayAdapter
+        }
+    }
+
+
+    private fun initializeSpinner(
+        spinner: SearchableSpinner,
+        doctorsNameList: ArrayList<String>,
+        doctorsList: ArrayList<Doctors>
+    ) {
+        val arrayAdapter =
+            context?.let { ArrayAdapter(it, R.layout.spinner_item, doctorsNameList) }
+        doctorText.visibility = View.GONE
+        doctorSpinner.visibility = View.VISIBLE
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>,
+                selectedItemView: View,
+                position: Int,
+                id: Long
+            ) {
+                storedSelctedDector = position
+                connecttionType = 2
+                currentPageNum = 1
+                selectedDoctorId = doctorsList[position].id
+                callPatientsListByDoctor(selectedDoctorId, currentPageNum, false)
                 myDataHolder = shared.edit()
                 myDataHolder.putInt("storedSelctedDector", storedSelctedDector)
             }
@@ -260,43 +324,25 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
         adapter = Patient_adapter(activity, allPatientsList)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
-        onTouchListener = RecyclerTouchListener(activity, recyclerView)
-        onTouchListener!!.setClickable(object : RecyclerTouchListener.OnRowClickListener {
-            override fun onRowClicked(position: Int) {
-                Log.i("hhhh", "" + position)
-            }
-
-            override fun onIndependentViewClicked(independentViewID: Int, position: Int) {
-                Log.i("hhhh", "" + position)
-
-            }
-        })
-            .setLongClickable(
-                true
-            ) { }
-            .setSwipeOptionViews(R.id.edit, R.id.delete)
-            .setSwipeable(
-                R.id.rowFG,
-                R.id.rowBG
-            ) { viewID, position ->
-                if (viewID == R.id.edit) {
-                    val patientId = allPatientsList[position].id
+        adapter.setOnItemListener(object : Patient_adapter.OnItemClickListener {
+            override fun onItemClicked(position: Int) {
+                val patientId = allPatientsList[position].id
+                if (FromFragment == "fromSwitch") {
                     var bundle = bundleOf("fromFragment" to "fromSwitch", "patientId" to patientId)
                     findNavController().navigate(
                         R.id.action_PatientFragment_to_SwitchFragment,
                         bundle
                     )
-                } else if (viewID == R.id.delete) {
-                    val patientId = allPatientsList[position].id
+                } else {
                     var bundle = bundleOf("fromFragment" to "fromDrop", "patientId" to patientId)
                     findNavController().navigate(
-                        R.id.action_PatientFragment_to_SwitchFragment,
+                        R.id.action_PatientFragment_to_DropFragment,
                         bundle
                     )
                 }
             }
 
-
+        })
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -314,10 +360,6 @@ class PatientsFragment : Fragment(), RecyclerTouchListener.RecyclerTouchListener
                 }
             }
         })
-    }
-
-    override fun setOnActivityTouchListener(listener: OnActivityTouchListener?) {
-        this.touchListener = listener
     }
 
     override fun onResume() {

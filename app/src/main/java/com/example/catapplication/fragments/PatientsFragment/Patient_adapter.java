@@ -22,6 +22,7 @@ public class Patient_adapter extends RecyclerView.Adapter<Patient_adapter.ViewHo
     private static final String TAG = "RecyclerViewAdapter";
 
     private List<PatientRepData> items;
+    private OnItemClickListener onItemClickListener;
 
     private Context mContext;
 
@@ -42,15 +43,10 @@ public class Patient_adapter extends RecyclerView.Adapter<Patient_adapter.ViewHo
     public void onBindViewHolder(@NonNull Patient_adapter.ViewHolder holder, final int position) {
         //to log which item is failed
         Log.d(TAG, "onBindViewHolder: called.");
-
         holder.name.setText(items.get(position).getDoctor_name());
         holder.dose.setText(items.get(position).getProduct_name());
         holder.category.setText(items.get(position).getCategory_name());
         holder.hospital.setText(items.get(position).getHospital_name());
-        holder.parent_layout.setOnClickListener(view -> {
-
-        });
-
     }
 
     @Override
@@ -71,7 +67,21 @@ public class Patient_adapter extends RecyclerView.Adapter<Patient_adapter.ViewHo
             dose = itemView.findViewById(R.id.dose);
             category = itemView.findViewById(R.id.category);
             hospital = itemView.findViewById(R.id.hospital);
-            parent_layout = itemView.findViewById(R.id.parent_layout);
+            itemView.setOnClickListener(view ->
+                    onItemClickListener.onItemClicked(getAdapterPosition()));
         }
     }
+
+
+    interface OnItemClickListener {
+        void onItemClicked(int position);
+
+
+    }
+
+    void setOnItemListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+
 }
