@@ -59,7 +59,7 @@
             android:adjustViewBounds="true"
             android:clickable="true"
             android:src="@drawable/ic_users"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
 
         <ImageView

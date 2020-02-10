@@ -27,8 +27,6 @@ import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import kotlinx.android.synthetic.main.patient_fragment.*
 import kotlinx.android.synthetic.main.patient_fragment.doctorText
-import android.widget.TextView
-import android.graphics.Color
 
 
 class PatientsFragment : Fragment() {
@@ -88,15 +86,6 @@ class PatientsFragment : Fragment() {
         button.setOnClickListener {
             findNavController().navigateUp()
         }
-
-        allpatients.setOnClickListener {
-            currentPageNum = 1
-            callPatientsList(currentPageNum, false)
-            connecttionType = 1
-            storedSelctedDector = 0
-
-        }
-
     }
 
 
@@ -116,6 +105,7 @@ class PatientsFragment : Fragment() {
 
     private fun prepareHospitalsList(hospitalDoctorsList: ArrayList<DoctorsHospiatalResponce>) {
         val hospitalNameList = arrayListOf<String>()
+        hospitalNameList.add("All Patients")
         for (hospital in hospitalDoctorsList) {
             hospitalNameList.add(hospital.name)
         }
@@ -264,11 +254,17 @@ class PatientsFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-
-                selectedHospitalId = hospitalDoctorsList[position].id
-                prepareDoctorsList(hospitalDoctorsList[position].doctors as ArrayList<Doctors>)
-
-
+                if (position == 0) {
+                    doctorText.visibility = View.VISIBLE
+                    doctorSpinner.visibility = View.GONE
+                    currentPageNum = 1
+                    callPatientsList(currentPageNum, false)
+                    connecttionType = 1
+                    storedSelctedDector = 0
+                } else {
+                    selectedHospitalId = hospitalDoctorsList[position - 1].id
+                    prepareDoctorsList(hospitalDoctorsList[position - 1].doctors as ArrayList<Doctors>)
+                }
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>) {
